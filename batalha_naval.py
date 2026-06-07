@@ -1,4 +1,5 @@
 import random
+import os
 
 # VARIAVEIS
 
@@ -13,10 +14,8 @@ gabarito_C = []
 
 def criar_matriz(linhas, colunas):
     matriz = []
-
     for i in range(linhas):
         matriz.append([0] * colunas)
-
     return matriz
 
 def print_matriz(matriz):
@@ -28,10 +27,28 @@ def print_tabuleiro():
     print_matriz(m_J)
     print(f"Gabarito Jogador: {gabarito_J}")
     print(f"Embarcações Restantes: {embarcacoes_J}")
-    print("Tabuleiro do Computador")
+    print(f"\nTabuleiro do Computador")
     print_matriz(m_C)
     print(f"Gabarito Computador: {gabarito_C}")
     print(f"Embarcações Restantes: {embarcacoes_C}")
+
+def verificar_vitoria(embarcacoes_J, embarcacoes_C):
+    if embarcacoes_J == 0:
+        os.system('cls')
+        print_tabuleiro()
+        print(f"\nVitória do Computador!")
+        print("Obrigado por jogar.")
+        print("Autores: Adriel Asafe e Leticia Oliveira\n")
+        return True
+    if embarcacoes_C == 0:
+        os.system('cls')
+        print_tabuleiro()
+        print(f"\nParabéns, vitória do Jogador!")
+        print("Obrigado por jogar.")
+        print("Autores: Adriel Asafe e Leticia Oliveira\n")
+        return True
+    
+    return False
 
 # MATRIZES
 
@@ -44,51 +61,67 @@ while True:
 
     # LOOP POSICIONAMENTO JOGADOR
 
-    
     while jogadas_J != 5:
         
-        print("Seu tabuleiro:")
+        print(f"Seu tabuleiro")
         print_matriz(m_JG)
 
         try:
-            x = int(input("Digite o X (0 a 4): "))
+            x = int(input("\nDigite o X (0 a 4): "))
         except ValueError:
-            print('X inválido. Digite de 0 a 4')
+            os.system('cls')
+            print(f'X inválido. Digite de 0 a 4\n')
             continue
 
         if x in (range(0, 5)):
 
-            try:
-                y = int(input("Digite o Y (0 a 9): "))
-            except ValueError:
-                print('Y inválido. Digite de 0 a 4')
-                continue
+            while True:
 
-            if y in (range(0,10)):           
-                if m_JG[x][y] != "X":
-                    m_JG[x][y] = "X"
-                    jogadas_J += 1
-                    gabarito_J.append(str(x) + str(y))
+                try:
+                    y = int(input("Digite o Y (0 a 9): "))
+                except ValueError:
+                    os.system('cls')
+                    print(f'Y inválido. Digite de 0 a 9\n')
+                    print("Seu tabuleiro")
+                    print_matriz(m_JG)
+                    print(f'\nDigite o X (0 a 4): {x}')
+                    continue
+
+                if y in (range(0,10)):           
+                    if m_JG[x][y] != "X":
+                        m_JG[x][y] = "X"
+                        jogadas_J += 1
+                        gabarito_J.append(str(x) + str(y))
+                        os.system('cls')
+                        break
+                    else:
+                        os.system('cls')
+                        print(f'Posição já escolhida.\n')
+                        break
                 else:
-                    print('Posição já escolhida.')
-            else:
-                print('Y inválido. Digite de 0 a 9.')
+                    os.system('cls')
+                    print(f'Y inválido. Digite de 0 a 9\n')
+                    print("Seu tabuleiro")
+                    print_matriz(m_JG)
+                    print(f'\nDigite o X (0 a 4): {x}')
         else:
-            print('X inválido. Digite de 0 a 4')
+            os.system('cls')
+            print(f'X inválido. Digite de 0 a 4\n')
         
         if jogadas_J == 5:
-            print("Seu tabuleiro:")
+            os.system('cls')
+            print("Seu tabuleiro")
             print_matriz(m_JG)
             print("Posições incluídas.")
-            continuar = input("Aperte enter para continuar.")
-
+            continuar = input(f"\nAperte enter para continuar.")
+            os.system('cls')
     
     # LOOP POSICIONAMENTO COMPUTADOR
 
     while jogadas_C != 5:
 
-        x = random.randint(0,4)
-        y = random.randint(0,9)
+        x = random.randint(0, 4)
+        y = random.randint(0, 9)
         if m_CG[x][y] != "X":    
             m_CG[x][y] = "X"
             jogadas_C += 1
@@ -98,64 +131,97 @@ while True:
 
     while True:
 
-        print_tabuleiro()
-
         # ESCOLHA JOGADOR
 
+        print("Sua vez de jogar\n")
+
         while True:
+            
+            print_tabuleiro()
 
             try:
-                x = int(input("Digite o X (0 a 4): "))
+                x = int(input("\nDigite o X (0 a 4): "))
             except ValueError:
-                print('X inválido. Digite de 0 a 4')
+                os.system('cls')
+                print(f'X inválido. Digite de 0 a 4\n')
                 continue
             
             if x in (range(0, 5)):
 
-                try:
-                    y = int(input("Digite o Y (0 a 9): "))
-                except ValueError:
-                    print('Y inválido. Digite de 0 a 4')
-                    continue
+                while True:
+                
+                    try:
+                        y = int(input("Digite o Y (0 a 9): "))
+                    except ValueError:
+                        os.system('cls')
+                        print(f'Y inválido. Digite de 0 a 9\n')
+                        print_tabuleiro()
+                        print(f'\nDigite o X (0 a 4): {x}')
+                        continue
 
-                if y in (range(0,10)):
-                    if m_CG[x][y] == "X":
-                        embarcacoes_C -= 1
-                        print("Jogador acertou!")
-                        break
+                    if y in (range(0,10)):
+                        if m_CG[x][y] == "X":
+                            os.system('cls')
+                            embarcacoes_C -= 1
+                            print(f"Jogador acertou!\n")
+                            print_tabuleiro()
+                            continuar = input(f"\nAperte enter para continuar.")
+                            os.system('cls')
+                            break
+                        else:
+                            os.system('cls')
+                            print(f"Jogador errou.\n")
+                            print_tabuleiro()
+                            continuar = input(f"\nAperte enter para continuar.")
+                            break
                     else:
-                        print("Jogador errou.")
-                else:
-                    print('Y inválido. Digite de 0 a 9.')
+                        os.system('cls')
+                        print(f'Y inválido. Digite de 0 a 9\n')
+                        print_tabuleiro()
+                        print(f'\nDigite o X (0 a 4): {x}')
             else:
-                print('X inválido. Digite de 0 a 4')
-            
-        
+                os.system('cls')
+                print(f'X inválido. Digite de 0 a 4\n')
+                continue
+
+            break
+
+        # VERIFICAR VITÓRIA JOGADOR
+
+        if verificar_vitoria(embarcacoes_J,embarcacoes_C):
+            break        
 
         # ESCOLHA COMPUTADOR
 
-        x = random.randint(range(0, 5))
-        y = random.randint(range(0,10))
+        os.system('cls')
+        print("Agora é a vez do computador\n")
+        print_tabuleiro()
+
+        x = random.randint(0, 4)
+        y = random.randint(0, 9)
+
+        print(f"\nComputador escolheu X: {x}")
+        print(f"Computador escolheu Y: {y}")
+        continuar = input(f"\nAperte enter para continuar.")
+
         if m_JG[x][y] == "X":
+            os.system('cls')
             embarcacoes_J -= 1
-            print("Computador acertou")
+            print(f"Computador acertou!\n")
+            print_tabuleiro()
+            continuar = input(f"\nAperte enter para continuar.")
+            os.system('cls')
+      
         else:
-            print("Computador errou")
+            os.system('cls')
+            print(f"Computador errou.\n")
+            print_tabuleiro()
+            continuar = input(f"\nAperte enter para continuar.")
+            os.system('cls')
         
-        # CONDIÇÃO DE VITÓRIA DO JOGADOR
+        # VERIFICAR VITÓRIA COMPUTADOR
 
-        if embarcacoes_J == 0:
-            print("Parabéns, vitória do Jogador!")
-            print("Obrigado por jogar.")
-            print("Autores: Adriel Asafe e Leticia Oliveira")
-            break
-
-        # CONDIÇÃO DE VITÓRIA DO COMPUTADOR
-
-        if embarcacoes_C == 0:
-            print("Vitória do Computador!")
-            print("Obrigado por jogar.")
-            print("Autores: Adriel Asafe e Leticia Oliveira")
-            break
+        if verificar_vitoria(embarcacoes_J,embarcacoes_C):
+            break 
 
     break
